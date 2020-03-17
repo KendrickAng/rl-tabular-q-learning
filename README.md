@@ -1,6 +1,8 @@
 # rl-tabular-q-learning
 Entry-level reinforcement learning example with tabular Q-learning. This project follows MorvanZhou's tabular Q-learning tutorials on Github.
 
+Python version: 3.6
+
 ## Appendix
 * There are two types of reinforcement learning: Utility learning and Q-learning.
 * In Utility learning, the agent learns a utility function to maximise utility from any action taken at any state. It thus has to have a model of the environment to be able to evaluate future actions (and hence assign a utility value).
