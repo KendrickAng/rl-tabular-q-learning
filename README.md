@@ -1,5 +1,5 @@
 # rl-tabular-q-learning
-Entry-level reinforcement learning example with tabular Q-learning. This project follows MorvanZhou's tabular Q-learning tutorials on Github.
+Entry-level reinforcement learning example with tabular Q-learning and deep Q-learning. This project follows MorvanZhou's tabular Q-learning tutorials on Github.
 
 Python version: 3.6
 
