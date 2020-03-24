@@ -6,10 +6,12 @@ UNIT = 40    #pixels
 MAZE_H = 4
 MAZE_W = 4
 
+UP, DOWN, RIGHT, LEFT = 0, 1, 2, 3
+
 class Maze(tk.Tk):
     def __init__(self):
         super(Maze, self).__init__()
-        self.action_space = ["UP", "DOWN", "LEFT", "RIGHT"]
+        self.action_space = [UP, DOWN, RIGHT, LEFT]
         self.title('maze')
         self.geometry("{0}x{1}".format(MAZE_H * UNIT, MAZE_W * UNIT))
         self._init_maze()
@@ -58,11 +60,41 @@ class Maze(tk.Tk):
 
 
     def _reset_maze(self):
-        pass
+        self.update()
+        time.sleep(0.5)
+        self.canvas.delete(self.rect)
+        origin = np.array([20, 20])
+        self.rect = self.canvas.create_rectangle(
+            origin[0] - 15, origin[1] - 15,
+            origin[0] + 15, origin[1] + 15,
+            fill="red"
+        )
+        return self.canvas.coords(self.rect)
 
-    def _update_maze(self):
-        pass
+    def _update_maze(self, action):
+        s_curr = self.canvas.coords(self.rect)
+        offset = np.array([0, 0])
+        if action == UP and s_curr[1] > UNIT:
+            offset[1] -= UNIT
+        elif action == DOWN and s_curr[1] < (MAZE_H - 1) * UNIT:
+            offset[1] += UNIT
+        elif action == RIGHT and s_curr[0] < (MAZE_W - 1) * UNIT:
+            offset[0] += UNIT
+        elif action == LEFT and s_curr[0] > UNIT:
+            offset[0] -= UNIT
+        self.canvas.move(self.rect, offset[0], offset[1]) # move agent
+        s_next = self.canvas.coords(self.rect)
+
+        # next state, reward, maze_done (dead/completed)
+        if s_next == self.canvas.coords(self.oval):
+            s_next = "TERMINAL"
+            return s_next, 1, True
+        elif s_next in [self.canvas.coords(self.hell1), self.canvas.coords(self.hell2)]:
+            s_next = "TERMINAL"
+            return s_next, -1, True
+
+        return s_next, 0, False
 
     def _render(self):
-        time.sleep(0.1)
+        time.sleep(0.2)
         self.update()   # tkinter's update() refreshes everything
